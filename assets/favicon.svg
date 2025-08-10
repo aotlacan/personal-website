@@ -1,0 +1,31 @@
+<!-- /assets/favicon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64" aria-hidden="true">
+  <defs>
+    <!-- Cut a crescent from two circles -->
+    <mask id="cut">
+      <rect width="64" height="64" fill="#000"></rect>
+      <!-- main moon disk -->
+      <circle cx="34" cy="30" r="22" fill="#fff"></circle>
+      <!-- subtracting circle to form crescent -->
+      <circle cx="46" cy="24" r="22" fill="#000"></circle>
+    </mask>
+  </defs>
+
+  <!-- Transparent background -->
+  <rect width="64" height="64" fill="none"></rect>
+
+  <!-- Crescent body -->
+  <g mask="url(#cut)">
+    <!-- Fill matches your site’s light text color -->
+    <circle cx="34" cy="30" r="22" fill="#e7e9ff"></circle>
+    <!-- Subtle outline so it shows on light tabs -->
+    <circle cx="34" cy="30" r="22" fill="none" stroke="#9fb4ff" stroke-opacity=".35" stroke-width="1.2"></circle>
+
+    <!-- Tiny craters, low opacity accent -->
+    <g opacity=".28">
+      <circle cx="28" cy="24" r="3" fill="#7aa2ff"></circle>
+      <circle cx="38" cy="34" r="2.1" fill="#7aa2ff"></circle>
+      <circle cx="30" cy="36" r="1.8" fill="#7aa2ff"></circle>
+    </g>
+  </g>
+</svg>

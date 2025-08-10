@@ -1,0 +1,57 @@
+<!-- /assets/hero-bg.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Dark neutral background -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101429"></stop>
+      <stop offset="0.55" stop-color="#0d1124"></stop>
+      <stop offset="1" stop-color="#0a0e1d"></stop>
+    </linearGradient>
+
+    <!-- Accent glows (matches accent #7aa2ff) -->
+    <radialGradient id="glow1" gradientUnits="userSpaceOnUse" cx="340" cy="220" r="520">
+      <stop offset="0" stop-color="#7aa2ff" stop-opacity="0.35"></stop>
+      <stop offset="1" stop-color="#7aa2ff" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="glow2" gradientUnits="userSpaceOnUse" cx="1320" cy="160" r="460">
+      <stop offset="0" stop-color="#7aa2ff" stop-opacity="0.22"></stop>
+      <stop offset="1" stop-color="#7aa2ff" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="glow3" gradientUnits="userSpaceOnUse" cx="800" cy="980" r="520">
+      <stop offset="0" stop-color="#7aa2ff" stop-opacity="0.12"></stop>
+      <stop offset="1" stop-color="#7aa2ff" stop-opacity="0"></stop>
+    </radialGradient>
+
+    <!-- Soft vignette -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+      <stop offset="65%" stop-color="#000" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.35"></stop>
+    </radialGradient>
+
+    <!-- Subtle line pattern -->
+    <pattern id="lines" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M0 31.5 H32" stroke="#8aa8ff" stroke-opacity="0.08" stroke-width="1"></path>
+    </pattern>
+  </defs>
+
+  <!-- Base -->
+  <rect width="1600" height="1200" fill="url(#bg)"></rect>
+
+  <!-- Accent glows -->
+  <rect width="1600" height="1200" fill="url(#glow1)"></rect>
+  <rect width="1600" height="1200" fill="url(#glow2)"></rect>
+  <rect width="1600" height="1200" fill="url(#glow3)"></rect>
+
+  <!-- Soft bottom waves -->
+  <g fill="none" stroke="#a8b9ff" stroke-opacity="0.14" stroke-width="1.6">
+    <path d="M0 900 C 260 860, 520 960, 800 930 C 1080 900, 1380 960, 1600 930"></path>
+    <path d="M0 960 C 300 920, 560 1020, 820 980 C 1080 940, 1380 1020, 1600 990" stroke-opacity="0.12"></path>
+    <path d="M0 1020 C 280 980, 560 1080, 820 1040 C 1100 1000, 1380 1080, 1600 1050" stroke-opacity="0.10"></path>
+  </g>
+
+  <!-- Faint horizontal lines for texture -->
+  <rect width="1600" height="1200" fill="url(#lines)"></rect>
+
+  <!-- Vignette on top -->
+  <rect width="1600" height="1200" fill="url(#vignette)"></rect>
+</svg>
