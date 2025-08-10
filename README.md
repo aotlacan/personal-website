@@ -1,4 +1,5 @@
 # Alex Otlacan — Portfolio
+# Current Website Domain is at https://aotlacan.pages.dev and or https://aotlacan.com
 
 A fast single-page site for projects, research, FIRST Robotics, Michigan Marching Band, a resume timeline, and contact links. Built with vanilla HTML, CSS, and a small amount of JS. No build step required.
 
@@ -27,3 +28,4 @@ Tip: use the VS Code Live Server extension for instant reloads.
 - Accessible link colors designed for a dark theme
 - Theming with CSS variables, including Michigan maize and blue accents
 - SVG favicon and SVG hero background
+
