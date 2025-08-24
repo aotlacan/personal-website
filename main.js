@@ -1,4 +1,4 @@
-// Keep sidebar below the real header height
+// Keep sidebar offset equal to the real header height
 (function(){
   const header = document.querySelector('.site-header');
   if(!header) return;
@@ -9,10 +9,12 @@
   };
 
   setOffset();
-  new ResizeObserver(setOffset).observe(header);
-  window.addEventListener('resize', setOffset);
+  if (window.ResizeObserver) {
+    new ResizeObserver(setOffset).observe(header);
+  } else {
+    window.addEventListener('resize', setOffset);
+  }
 })();
-
 
 // Smooth anchor scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -32,6 +34,13 @@ if(menuBtn && nav){
   menuBtn.addEventListener('click', ()=>{
     const open = nav.classList.toggle('open');
     menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  // Close the menu when any nav link is clicked
+  nav.querySelectorAll('a[href^="#"]').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
   });
 }
 
@@ -64,9 +73,10 @@ document.querySelectorAll('.tilt').forEach(card=>{
   });
 });
 
-// Build the side timeline
+// Build the left on-page nav rail
 (function(){
-  const ids = ['overview','research','robotics','mmb','projects','timeline','skills','contact','resume'];
+  // Updated: include "experience" instead of "timeline"
+  const ids = ['overview','research','robotics','mmb','projects','experience','skills','contact','resume'];
   const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
   const list = document.getElementById('tl-list');
   if(!list || !sections.length) return;
@@ -134,6 +144,25 @@ document.querySelectorAll('.tilt').forEach(card=>{
 
   setState(true); // set to false if you want it collapsed by default
   btn.addEventListener('click', ()=> setState(btn.getAttribute('aria-expanded') !== 'true'));
+})();
+
+// Scroll progress bar
+(function(){
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const update = () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const max = scrollHeight - clientHeight;
+    const ratio = max > 0 ? clamp01(scrollTop / max) : 0;
+    bar.style.width = (ratio * 100).toFixed(2) + '%';
+  };
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+  update();
 })();
 
 // Footer year
