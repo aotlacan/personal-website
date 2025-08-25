@@ -6,7 +6,7 @@
   <title>Alex Otlacan - Portfolio</title>
   <meta name="description" content="Robotics Engineering student at the University of Michigan." />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <link rel="preload" as="image" href="/assets/hero-bg.svg" />
+  <link rel="preload" as="image" href="/assets/bg-texture.jpg" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,10 +14,7 @@
   <!-- scroll progress bar (one instance) -->
   <div id="scroll-progress" aria-hidden="true"></div>
 
-  <!-- background glow -->
-  <div class="bg">
-    <img src="/assets/hero-bg.svg" alt="" width="1600" height="1200" loading="eager" decoding="async" />
-  </div>
+<div id="spot" aria-hidden="true"></div>
 
   <!-- top nav -->
   <header class="site-header">
@@ -53,7 +50,7 @@
         <span>Robotics</span><span>Controls</span><span>CAD</span><span>Prototyping</span><span>Front-end</span><span>Animation</span>
       </div>
       <div class="actions">
-        <a class="btn" href="#projects">See projects</a>
+        <a class="btn on-maize" href="#projects">See projects</a>
         <a class="btn ghost" href="#experience">See experience</a>
       </div>
     </section>
@@ -217,7 +214,7 @@
 
       <!-- ordered list reads well with screen readers and mirrors the ref layout -->
       <ol class="exp-list">
-        <li class="exp-item reveal">
+        <li class="exp-item reveal" data-year="2024"> 
           <div class="exp-meta">
             <span class="exp-date">Jan 2024 to Present · Ann Arbor, MI</span>
           </div>
@@ -234,7 +231,7 @@
           </div>
         </li>
 
-        <li class="exp-item reveal">
+        <li class="exp-item reveal" data-year="2024">
           <div class="exp-meta">
             <span class="exp-date">Oct 2024 to Present · Ann Arbor, MI</span>
           </div>
@@ -250,7 +247,7 @@
           </div>
         </li>
 
-        <li class="exp-item reveal">
+        <li class="exp-item reveal" data-year="2019">
           <div class="exp-meta">
             <span class="exp-date">Oct 2019 to Jun 2023 · Warren, MI</span>
           </div>
@@ -266,7 +263,7 @@
           </div>
         </li>
 
-        <li class="exp-item reveal">
+        <li class="exp-item reveal" data-year="2023">
           <div class="exp-meta">
             <span class="exp-date">Aug 2023 to Apr 2027 · Ann Arbor, MI</span>
           </div>
@@ -281,7 +278,7 @@
           </div>
         </li>
 
-        <li class="exp-item reveal">
+        <li class="exp-item reveal" data-year="2021">
           <div class="exp-meta">
             <span class="exp-date">Aug 2021 to Apr 2023</span>
           </div>
@@ -293,7 +290,7 @@
           </div>
         </li>
 
-        <li class="exp-item reveal">
+        <li class="exp-item reveal" data-year="2019">
           <div class="exp-meta">
             <span class="exp-date">2019 to 2023</span>
           </div>
@@ -347,7 +344,11 @@
 
     <section id="resume" class="wrap" data-title="Resume">
       <h2 class="section-title reveal">Resume</h2>
-      <p class="reveal"><a href="/Alexandru_Otlacan_Resume.pdf" target="_blank" rel="noopener">Download resume (PDF)</a>.</p>
+      <p class="reveal">
+  <a href="/assets/Alexandru_Otlacan_Resume.pdf" target="_blank" rel="noopener">
+    Download resume (PDF)
+  </a>
+</p>
     </section>
   </main>
 

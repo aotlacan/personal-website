@@ -8,15 +8,17 @@
   --bg:#0f1226;
   --fg:#e7e9ff;
   --muted:#aeb3d1;
-  --accent:#7aa2ff;
+
+  /* Neutral accent + border (no blue) */
+  --accent:#cfd2e8;
   --card:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.12);
+  --border:rgba(255,255,255,.20);
 
   --text-outline:#00274C;   /* outline color */
   --text-outline-w:.8px;     /* outline width */
 
   --scrollbarBG:#2a2f52;     /* scrollbar track */
-  --thumbBG:#7aa2ff;         /* scrollbar thumb */
+  --thumbBG:#cfd2e8;         /* scrollbar thumb now neutral */
 
   /* University of Michigan colors */
   --um-maize:#FFCB05;
@@ -58,17 +60,55 @@ body{
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
 
+/* Smooth anchors and fixed-header offset */
+html{ scroll-behavior:smooth; scroll-padding-top: var(--header-h); }
+
+/* Professional textured black background, toned down */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  /* Add dark overlay on top of the image to reduce its presence */
+  background-image:
+    linear-gradient(rgba(0,0,0,.68), rgba(0,0,0,.68)),
+    url("/assets/bg-texture.jpg");
+  background-size:cover;
+  background-position:center;
+  /* Lower contrast and brightness so it sits back */
+  filter:grayscale(100%) brightness(.35) contrast(1.05);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  /* Softer vignette */
+  background: radial-gradient(120% 120% at 50% 0%,
+              rgba(255,255,255,.02) 0%,
+              rgba(0,0,0,.60) 55%,
+              rgba(0,0,0,.78) 100%);
+  pointer-events:none;
+}
+
+/* Cursor spotlight: brightens area around the pointer */
+#spot{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background: radial-gradient(220px at var(--mx) var(--my),
+              rgba(255,255,255,.08), rgba(255,255,255,0) 40%);
+  mix-blend-mode: screen; /* subtle highlight under the cursor */
+}
+/* Ensure content is above the spotlight */
+main, .site-header, .side-timeline, .side-toggle{ position:relative; z-index:1 }
+
 /* Layout wrappers */
 .wrap{ max-width:1100px; margin:0 auto; padding:72px 24px }
 .section-title{ font-size:clamp(1.4rem,3.5vw,2rem); margin:0 0 16px 0 }
 .muted{ color:var(--muted) }
 
-/* Background glow */
-.bg{
-  position:fixed; inset:0; z-index:-1; display:grid; place-items:center; pointer-events:none; opacity:.7;
-  filter: drop-shadow(0 0 60px rgba(122,162,255,.15));
-}
-.bg img{ max-width:100%; height:auto }
+/* Background glow (disabled; using textured background instead) */
+.bg{ display:none !important; }
+.bg img{ display:none !important; }
 
 /* Header */
 .site-header{
@@ -82,7 +122,9 @@ body{
   display:inline-grid; place-items:center;
   width:36px; height:36px; border-radius:10px;
   font-weight:900; text-decoration:none; color:#06122b;
-  background:linear-gradient(135deg, var(--accent), #c6d1ff);
+  /* Neutral gradient rather than blue */
+  background:linear-gradient(135deg, var(--accent), #eaecf6);
+  border:1px solid var(--border);
 }
 .menu-btn{ display:none }
 .nav{ display:flex; gap:18px; flex-wrap:wrap }
@@ -99,9 +141,27 @@ body{
 
 .btn{
   display:inline-block; padding:12px 18px; border-radius:14px;
-  background:var(--accent); color:#06122b; font-weight:700; text-decoration:none;
+  background:var(--um-maize);          /* maize */
+  color:var(--um-blue);                /* UM blue text */
+  font-weight:800; text-decoration:none;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 4px 18px rgba(255,203,5,.18);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
 }
+.btn:hover{ transform: translateY(-1px); box-shadow:0 8px 22px rgba(255,203,5,.26); }
+.btn:active{ transform: translateY(0); box-shadow:0 4px 18px rgba(255,203,5,.18); }
+
+/* keep ghost button neutral */
 .btn.ghost{ background:transparent; color:var(--fg); border:1px solid var(--border) }
+
+/* Optional white text variant for maize buttons, with crisp outer shadow */
+.btn.on-maize{
+  color:#ffffff;
+  -webkit-text-stroke: 0 transparent; /* remove stroke to avoid gray fill artifacts */
+  text-shadow:
+    0 2px 2px rgba(0,0,0,.35), /* soft outer shadow below */
+    0 0 6px rgba(0,0,0,.25);   /* gentle glow for contrast */
+}
 
 /* Grid and cards */
 .grid{ display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)) }
@@ -134,7 +194,7 @@ body{
 
 /* Media handling */
 .card img{ display:block; width:100%; max-width:100%; height:auto; border-radius:12px }
-.video{ aspect-ratio:16/9; overflow:hidden; border-radius:12px }
+.video{ aspect-ratio:16/9; overflow:hidden; border-radius:12px; border:1px solid var(--border); }
 .video iframe{ display:block; width:100%; height:100%; border:0 }
 
 /* Gallery */
@@ -173,7 +233,7 @@ body{
 .timeline{ position:relative; margin:18px 0 }
 .timeline::before{ content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:linear-gradient(#2a2f52, transparent) }
 .t-item{ position:relative; padding-left:48px; margin:20px 0 }
-.t-dot{ position:absolute; left:8px; top:10px; width:14px; height:14px; border-radius:999px; background:var(--accent); box-shadow:0 0 0 4px rgba(122,162,255,.18) }
+.t-dot{ position:absolute; left:8px; top:10px; width:14px; height:14px; border-radius:999px; background:var(--accent); box-shadow:0 0 0 4px rgba(255,255,255,.18) }
 .t-card{ padding:14px; border-radius:14px; background:var(--card); border:1px solid var(--border) }
 .t-card h3{ margin:0 0 4px 0 }
 .t-card small{ color:var(--muted) }
@@ -236,6 +296,8 @@ body{
   display:grid; grid-template-columns:18px 1fr; align-items:center;
   gap:var(--tl-gap);
   padding:2px 0;
+  isolation:isolate;
+  z-index:0;
 }
 .tl-dot{
   width:calc(16px * var(--tl-scale));
@@ -260,12 +322,27 @@ body{
   overflow:hidden; text-overflow:ellipsis;
   opacity:.85;
   transition:opacity .18s ease, color .18s ease;
+  position:relative;
+  padding:4px 8px;
+  border-radius:8px;
+  background:rgba(15,18,38,.70);
+  backdrop-filter:blur(4px);
+  border:1px solid var(--border);
+  z-index:1;
 }
 .tl-item:hover .tl-link,
 .side-timeline:hover .tl-link{ opacity:1; }
 .tl-item.active .tl-link{ color:var(--fg); opacity:1; font-weight:600; }
-.tl-item.active .tl-dot{ background:var(--accent); box-shadow:0 0 0 5px rgba(122,162,255,.22); transform:scale(1.1) }
+.tl-item.active .tl-dot{
+  background:var(--accent);
+  box-shadow:0 0 0 5px rgba(255,255,255,.22); /* neutral glow */
+  transform:scale(1.1)
+}
 .tl-item:hover .tl-dot, .tl-item:focus-within .tl-dot{ background:var(--accent) }
+
+/* Prevent number/dot bleed-through between stacked items */
+.tl-item:hover{ z-index:2; }
+.tl-item.active{ z-index:3; }
 .side-timeline.collapsed{ transform:translateX(var(--collapse-shift)); opacity:0; pointer-events:none }
 
 /* Hamburger toggle */
@@ -287,17 +364,17 @@ body{
 
 /* Global link colors */
 :root{
-  --link:#9fb4ff;
-  --link-hover:#c7d4ff;
-  --link-active:#dde6ff;
+  --link:#d7dbeb;
+  --link-hover:#ebedf6;
+  --link-active:#ffffff;
 }
 a{
   color:var(--link);
   text-decoration:underline;
-  text-decoration-color:rgba(159,180,255,.45);
+  text-decoration-color:rgba(215,219,235,.45);
   text-underline-offset:2px;
 }
-a:visited{ color:var(--link); }    /* no purple */
+a:visited{ color:var(--link); }
 a:hover,
 a:focus-visible{
   color:var(--link-hover);
@@ -326,8 +403,8 @@ html{
   height:4px;
   width:0%;
   z-index:1000;
-  background:linear-gradient(90deg, var(--accent), #c6d1ff);
-  box-shadow:0 0 12px rgba(122,162,255,.35);
+  background:linear-gradient(90deg, #cfd2e8, #eaecf6);
+  box-shadow:0 0 12px rgba(0,0,0,.25);
   transform-origin:left center;
   pointer-events:none;
 }
@@ -336,39 +413,112 @@ html{
 }
 
 /* =========================================================
-   Experience list (new)
+   Experience timeline — alternating cards (Apple Glass vibe)
    ========================================================= */
 .exp-list{
+  position:relative;
   list-style:none;
-  margin:0;
-  padding:0;
-  display:grid;
-  gap:22px;
+  margin:32px auto 24px;
+  padding:0 0 24px;
+  max-width:1100px;
 }
-.exp-item{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:18px;
-  padding:16px;
-  border-radius:14px;
-  background:var(--card);
-  border:1px solid var(--border);
+.exp-list::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:2px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+  border-radius:2px;
 }
-.exp-meta{ color:var(--muted); font-size:.95rem; padding-top:2px }
-.exp-date{ white-space:nowrap }
 
+/* Each item sits on one side of the center line */
+.exp-item{
+  position:relative;
+  width:50%;
+  padding:12px 24px;
+}
+
+/* Odd = left, Even = right */
+.exp-item:nth-child(odd){ left:0; text-align:left; }
+.exp-item:nth-child(even){ margin-left:50%; text-align:left; }
+
+/* Connector dot on the center rail */
+/* Year bubble replaces the rail dot */
+.exp-item::before{
+  content: attr(data-year);
+  position:absolute;
+  top:32px;                 /* aligns with date label center */
+  left:100%;
+  transform:translate(-50%, -50%);
+  padding:4px 8px;
+  font-size:.8rem;
+  line-height:1;
+  color:var(--fg);
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--border);
+  border-radius:999px;
+  backdrop-filter:blur(6px) saturate(120%);
+  -webkit-backdrop-filter:blur(6px) saturate(120%);
+  z-index:1;
+  white-space:nowrap;
+}
+.exp-item:nth-child(even)::before{
+  left:0%;
+  transform:translate(-50%, -50%);
+}
+
+/* Glassy card */
+.exp-body{
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px 16px 12px 16px;
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.10); /* soft inner highlight */
+}
+
+/* Move date to the side opposite the card for readability */
+/* Move date to the side opposite the card for readability */
+.exp-meta{
+  position:absolute;
+  top:31px;                 /* align vertically with year bubble */
+  transform:translateY(-50%); /* keep vertical centering */
+  z-index:2;
+  background:transparent;
+  white-space:nowrap;
+  font-size:.95rem;
+  color:var(--muted);
+  opacity:.95;
+}
+/* Odd item has card on the left, so put meta on the RIGHT of the rail */
+.exp-item:nth-child(odd) .exp-meta{
+  left:calc(100% + 28px);
+  right:auto;
+  text-align:left;
+}
+/* Even item has card on the right, so put meta on the LEFT of the rail */
+.exp-item:nth-child(even) .exp-meta{
+  right:calc(100% + 28px);
+  left:auto;
+  text-align:right;
+}
+
+ 
 .exp-body h3.exp-role{
   margin:0 0 8px 0;
   font-size:clamp(1.05rem,2vw,1.25rem);
 }
 .exp-role a{ text-decoration:underline }
 
-.exp-points{
-  margin:0 0 10px 0;
-  padding-left:18px;
-}
+/* Bullet points and tech tags keep neutral borders */
+.exp-points{ margin:0 0 10px 0; padding-left:18px }
 .exp-points li{ margin:6px 0 }
-
 .exp-tech{
   display:flex; flex-wrap:wrap; gap:8px;
   list-style:none; margin:0; padding:0;
@@ -378,8 +528,20 @@ html{
   background:rgba(255,255,255,.08); border:1px solid var(--border);
 }
 
-/* Stack experience on small screens */
-@media (max-width:720px){
-  .exp-item{ grid-template-columns:1fr }
-  .exp-meta{ order:-1 }
+/* Fix clipping: ensure enough spacing between items */
+.exp-item + .exp-item{ margin-top:28px }
+
+/* Mobile: collapse to single column, rail on the left */
+@media (max-width:900px){
+  .exp-list::before{ left:32px; transform:none }
+  .exp-item{ width:100%; margin-left:0; padding-left:64px }
+  .exp-item::before{ left:32px; transform:translate(-50%,0) }
+  .exp-meta{
+    position:relative;
+    top:auto; right:auto; left:auto;
+    transform:none;
+    margin:0 0 8px 0;
+    text-align:left;
+    display:block;
+  }
 }

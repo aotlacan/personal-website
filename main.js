@@ -22,7 +22,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     const id = a.getAttribute('href');
     if(id && id.length>1){
       const el = document.querySelector(id);
-      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      if(el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        history.pushState(null, "", id);
+      }
     }
   });
 });
@@ -112,21 +116,46 @@ document.querySelectorAll('.tilt').forEach(card=>{
   const items = Array.from(list.querySelectorAll('.tl-item'));
   const map = new Map(sections.map((sec,i)=>[sec, items[i]]));
 
-  const obs = new IntersectionObserver(entries=>{
-    let best = null, bestDist = Infinity;
+  const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+
+  // IntersectionObserver: pick the visible section with the largest intersection ratio
+  const io = new IntersectionObserver((entries)=>{
+    let best = null, ratio = 0;
     for(const e of entries){
-      if(!e.isIntersecting) continue;
-      const rect = e.target.getBoundingClientRect();
-      const dist = Math.abs(rect.top - 110);
-      if(dist < bestDist){ bestDist = dist; best = e.target; }
+      if(e.isIntersecting && e.intersectionRatio > ratio){
+        ratio = e.intersectionRatio;
+        best = e.target;
+      }
     }
     if(best){
       items.forEach(li => li.classList.remove('active'));
       map.get(best)?.classList.add('active');
     }
-  }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: [0,.25,.5,.75,1] });
+  }, {
+    root: null,
+    threshold: [0.25, 0.5, 0.75],
+    rootMargin: `-${headerH}px 0px -40% 0px`
+  });
 
-  sections.forEach(sec => obs.observe(sec));
+  sections.forEach(sec => io.observe(sec));
+
+  // Fallback: choose the section nearest the viewport center to avoid "second-to-last" bug
+  function updateActiveByCenter(){
+    const y = window.scrollY + window.innerHeight * 0.5;
+    let best = null, bestDist = Infinity;
+    for(const s of sections){
+      const top = window.scrollY + s.getBoundingClientRect().top;
+      const d = Math.abs(top - y);
+      if(d < bestDist){ bestDist = d; best = s; }
+    }
+    if(best){
+      items.forEach(li => li.classList.remove('active'));
+      map.get(best)?.classList.add('active');
+    }
+  }
+  window.addEventListener('scroll', updateActiveByCenter, {passive:true});
+  window.addEventListener('resize', updateActiveByCenter);
+  updateActiveByCenter();
 })();
 
 // Toggle open/close for sidebar
@@ -163,6 +192,23 @@ document.querySelectorAll('.tilt').forEach(card=>{
   window.addEventListener('resize', update);
   window.addEventListener('load', update);
   update();
+})();
+
+// Cursor spotlight position variables
+(function(){
+  const root = document.documentElement;
+  const set = (e)=>{
+    root.style.setProperty('--mx', (e.clientX || 0) + 'px');
+    root.style.setProperty('--my', (e.clientY || 0) + 'px');
+  };
+  window.addEventListener('mousemove', set, {passive:true});
+  window.addEventListener('touchmove', (e)=>{
+    const t = e.touches && e.touches[0];
+    if(t) set(t);
+  }, {passive:true});
+  // initialize to center
+  root.style.setProperty('--mx', (window.innerWidth/2) + 'px');
+  root.style.setProperty('--my', (window.innerHeight/2) + 'px');
 })();
 
 // Footer year
